@@ -1,2 +1,2 @@
 # soslyze
-sosreport analyzer: fetch data from sosreport archive for SysMgmt/Subscription-Management/Insights related topics.
+sosreport analyzer: fetch SysMgmt/Subscription Management/Insights data from sosreport archive.
