@@ -53,7 +53,7 @@ echo -e "${RED}SELinux:${RESET}\n$SELINUX\n"
 SUBSCRIPTION_PLATFORM=$(egrep "^hostname|^baseurl|^port" ./etc/rhsm/rhsm.conf)
 PROXY=$(grep -e ^proxy ./etc/rhsm/rhsm.conf)
 SCA=$(rct cat-cert ./etc/pki/entitlement/*[0-9].pem | grep content_access)
-CONSUMED_SUBS=$(egrep "Subscription Name|Subskriptionsname" ./sos_commands/subscription_manager/subscription-manager_list_--consumed)
+CONSUMED_SUBS=$(cat ./sos_commands/subscription_manager/subscription-manager_list_--consumed | egrep "Subscription Name|Subskriptionsname|SKU|Starts|Ends")
 THIRD_PARTY_RPMS=$(grep -v 'Red Hat' ./sos_commands/rpm/package-data | awk {'print $1,$8,$9'})
 CUSTOM_FACTS=$(cat ./etc/rhsm/facts/*)
 CV_LFCE_ORG=$(cat ./sos_commands/subscription_manager/subscription-manager_identity)
@@ -99,14 +99,16 @@ if [ $(grep -c ^satellite-6 ./installed-rpms) -eq 1 ]; then
         SAT_RELEASE=$(egrep "satellite-6|capsule" ./installed-rpms)
         HEALTH_CHECK=$(egrep -v "Server Response|message" ./sos_commands/foreman/hammer_ping)
         CUSTOM_CERTS=$(egrep -i 'server_key|server_cert_req|server_ca_cert|server_cert' ./etc/foreman-installer/scenarios.d/satellite-answers.yaml)
-        OPEN_PORTS=$(grep LISTEN ./netstat | grep "tcp ")
+        OPEN_PORTS=$(head -2 ./netstat && grep LISTEN ./netstat | grep "tcp")
+	HIERA=$(egrep -v '^\s*(#|$)' ./etc/foreman-installer/custom-hiera.yaml)
 
         echo -e "\n"
         echo -e "${CYAN}${BOLD}### SATELLITE INFORMATION ###${RESET}\n"
         echo -e "${RED}Satellite version:${RESET}\n$SAT_RELEASE\n"
         echo -e "${RED}Hammer ping:${RESET}\n$HEALTH_CHECK\n"
-        echo -e "${RED}Open ipv4 ports:${RESET}\n$OPEN_PORTS\n"
-        echo -e "${RED}Custom certificates:${RESET}\n$CUSTOM_CERTS\n"
+        echo -e "${RED}Opened ports:${RESET}\n$OPEN_PORTS\n"
+	echo -e "${RED}Custom or default certificates (empty values means default certs):${RESET}\n$CUSTOM_CERTS\n"
+	echo -e "${RED}Custom hiera:${RESET}\n$HIERA\n"
 
 else
         echo -e "${YELLOW}Not a satellite server. Skipping..${RESET}"
