@@ -92,7 +92,7 @@ else
 fi
 
 
-## SATELLITE
+## SATELLITEs
 
 if [ $(grep -c ^satellite-6 ./installed-rpms) -eq 1 ]; then
 
