@@ -1,18 +1,17 @@
 #!/bin/bash
 
 if [ $# -gt 0 ]; then 	
-	DIR=${1%/}   	# remove trailing slash
+	SOS_DIR=${1%/}   	# remove trailing slash
 else
-        echo "Missing path to extracted sosreport. Use absolute path."
-	echo "Use sudo if the script fails to read files in sosreport."
-        echo "Usage: sudo ./soslyze /path/to/sosreport"
+        echo "Missing path to extracted sosreport."
+    	echo "Example: ./soslyze /path/to/sosreport"
         exit
 fi
 
 
-if [ ! -d $DIR/sos_reports ]; then
-	echo -e "\n\n${YELLOW}This is not a valid sosreport archive. Exiting.${RESET}\n\n"
-	exit
+if [ ! -d $SOS_DIR/sos_reports ]; then
+		echo -e "\n\n${YELLOW}This is not a valid sosreport archive. Exiting..${RESET}\n\n"
+		exit
 fi
 
 
@@ -36,6 +35,12 @@ RAM=$(cat ./free)
 CPU=$(grep -e "^CPU(s)" -e "Socket(s)" -e "Core(s) per socket" ./sos_commands/processor/lscpu)
 FULL_FS=$(cat ./df | awk '$5 >=90 {print $5,$6}')
 SELINUX=$(egrep -i "SELinux status|Current mode" ./sos_commands/selinux/sestatus)
+#CRON=$()
+#MEMORY=$()
+#MEM_PROCESS=$(head -1 ./ps && sort -nrk6 ./ps | head -n5)
+#MEM_USER
+#CPU_PROCESS
+
 echo -e "\n"
 echo -e "${CYAN}${BOLD}### GENERAL INFORMATION ###${RESET}\n"
 echo -e "${RED}Hostname:${RESET}\n$HOSTNAME\n"
@@ -44,7 +49,7 @@ echo -e "${RED}Time and Date:${RESET}\n$DATE\n"
 echo -e "${RED}Release:${RESET}\n$RELEASE\n"
 echo -e "${RED}Memory:${RESET}\n$RAM\n"
 echo -e "${RED}CPU:${RESET}\n$CPU\n"
-echo -e "${RED}Show only filesystems with more than 90% usage:${RESET}\n$FULL_FS\n"
+echo -e "${RED}Show filesystems with more than 90% usage:${RESET}\n$FULL_FS\n"
 echo -e "${RED}SELinux:${RESET}\n$SELINUX\n"
 
 
@@ -84,7 +89,7 @@ if [ $(grep -c ^insights-client ./installed-rpms) -eq 1 ]; then
 	echo -e "\n"
 	echo -e "${CYAN}${BOLD}### INSIGHTS ###${RESET}\n"
 	echo -e "${RED}Version of insights-client:${RESET}\n$INSIGHTS_CLIENT\n"
-	echo -e "${RED}Insights configuration (shows only settings that are not default):${RESET}\n$INSIGHTS_CONFIG\n"
+	echo -e "${RED}Insights configuration (shows only non-default settings):${RESET}\n$INSIGHTS_CONFIG\n"
 
 else
 	echo -e "${YELLOW}Insights not configured. Skipping..${RESET}"
@@ -92,25 +97,39 @@ else
 fi
 
 
-## SATELLITEs
+## SATELLITE
 
 if [ $(grep -c ^satellite-6 ./installed-rpms) -eq 1 ]; then
 
-        SAT_RELEASE=$(egrep "satellite-6|capsule" ./installed-rpms)
-        HEALTH_CHECK=$(egrep -v "Server Response|message" ./sos_commands/foreman/hammer_ping)
-        CUSTOM_CERTS=$(egrep -i 'server_key|server_cert_req|server_ca_cert|server_cert' ./etc/foreman-installer/scenarios.d/satellite-answers.yaml)
-        OPEN_PORTS=$(head -2 ./netstat && grep LISTEN ./netstat | grep "tcp")
+    SAT_RELEASE=$(egrep "satellite-6|capsule" ./installed-rpms)
+    HEALTH_CHECK=$(cat ./sos_commands/foreman/hammer_ping)
+    CUSTOM_CERTS=$(egrep -i 'server_key|server_cert_req|server_ca_cert|server_cert' ./etc/foreman-installer/scenarios.d/satellite-answers.yaml)
+    OPEN_PORTS=$(head -2 ./netstat && grep LISTEN ./netstat | grep "tcp")
 	HIERA=$(egrep -v '^\s*(#|$)' ./etc/foreman-installer/custom-hiera.yaml)
+	#TUNING_PROFILE=$(grep tuning ./etc/foreman-installer/scenarios.d/satellite.yaml)
+	#TUNING_PUMA=$(grep puma ./etc/foreman-installer/scenarios.d/satellite-answers.yaml)
+	#TUNING_DYNFLOW=$(grep dynflow_worker ./etc/foreman-installer/scenarios.d/satellite-answers.yaml)
+	#TUNING_HTTPD=$(cat ./etc/httpd/conf.modules.d/prefork.conf)
+	#TUNING_PUPPET=$(grep JAVA_ARGS ./etc/sysconfig/puppetserver)
+	#TUNING_POSTGRESQL=$(egrep 'max_connections|shared_buffers|work_mem|autovacuum_vacuum_cost_limit' ./var/lib/pgsql/data/postgresql.conf)
+	#TUNING_QDROUTERD=$(grep LimitNOFILE ./etc/systemd/system/qdrouterd.service.d/*)
+	#TUNING_QPIDD=$(grep LimitNOFILE ./etc/systemd/system/qpidd.service.d/*)
+	#HTTPS_TRAFFIC=$(awk '{ print $1 }' var/log/httpd/foreman-ssl_access_ssl.log | sort | uniq -c | sort -nr -k 1 | head -n 10)
+	#YUM_HISTORY=$(cat ./sos_commands/yum/yum_history)
+	#TASKS_RUNNING=$(grep running ./sos_commands/foreman/foreman_tasks_tasks)
+	#TASKS_PAUSED=$(grep paused ./sos_commands/foreman/foreman_tasks_tasks)
+	#FOREMAN_SETTINGS=$()
 
-        echo -e "\n"
-        echo -e "${CYAN}${BOLD}### SATELLITE INFORMATION ###${RESET}\n"
-        echo -e "${RED}Satellite version:${RESET}\n$SAT_RELEASE\n"
-        echo -e "${RED}Hammer ping:${RESET}\n$HEALTH_CHECK\n"
-        echo -e "${RED}Opened ports:${RESET}\n$OPEN_PORTS\n"
+    echo -e "\n"
+    echo -e "${CYAN}${BOLD}### SATELLITE INFORMATION ###${RESET}\n"
+    echo -e "${RED}Satellite version:${RESET}\n$SAT_RELEASE\n"
+    echo -e "${RED}Hammer ping:${RESET}\n$HEALTH_CHECK\n"
+    echo -e "${RED}Opened ports:${RESET}\n$OPEN_PORTS\n"
+
 	echo -e "${RED}Custom or default certificates (empty values means default certs):${RESET}\n$CUSTOM_CERTS\n"
 	echo -e "${RED}Custom hiera:${RESET}\n$HIERA\n"
 
 else
-        echo -e "${YELLOW}Not a satellite server. Skipping..${RESET}"
+    echo -e "${YELLOW}Not a satellite server. Skipping..${RESET}"
 
 fi
