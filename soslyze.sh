@@ -35,6 +35,7 @@ RAM=$(cat ./free)
 CPU=$(grep -e "^CPU(s)" -e "Socket(s)" -e "Core(s) per socket" ./sos_commands/processor/lscpu)
 FULL_FS=$(cat ./df | awk '$5 >=90 {print $5,$6}')
 SELINUX=$(egrep -i "SELinux status|Current mode" ./sos_commands/selinux/sestatus)
+VM=$(egrep 'Vendor|Manufacturer' ./dmidecode | head -3)
 #CRON=$()
 #MEMORY=$()
 #MEM_PROCESS=$(head -1 ./ps && sort -nrk6 ./ps | head -n5)
@@ -51,6 +52,7 @@ echo -e "${RED}${BOLD}Memory:${RESET}\n$RAM\n"
 echo -e "${RED}${BOLD}CPU:${RESET}\n$CPU\n"
 echo -e "${RED}${BOLD}Show filesystems with more than 90% usage:${RESET}\n$FULL_FS\n"
 echo -e "${RED}${BOLD}SELinux:${RESET}\n$SELINUX\n"
+echo -e "${RED}${BOLD}VM or physical?:${RESET}\n$VM\n"
 
 
 ## Subscription Management
