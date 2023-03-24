@@ -6,7 +6,7 @@ Usage:
 
 ```
 # ./soslyze.sh /path/to/sosreport
-``~
+```
 
 
 sosreport is an extensible, portable, support data collection tool primarily
