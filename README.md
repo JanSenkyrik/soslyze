@@ -1,6 +1,6 @@
 # soslyze
 
-Summarize SysMgmt/Subscription Management/Insights data from sosreport archive.
+Summarize SysMgmt/Subscription Management/Insights data from an extracted sosreport archive.
 
 Usage:
 
