@@ -4,5 +4,6 @@ Summarize SysMgmt/Subscription Management/Insights data from an extracted sosrep
 
 Usage:
 
-
+```
 \# ./soslyze /path/to/sosreport
+```
