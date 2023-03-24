@@ -11,7 +11,7 @@ if [ $# -gt 0 ]; then
 	SOS_DIR=${1%/}   	# remove trailing slash
 else
     echo -e "\n${YELLOW}${BOLD}Missing path to extracted sosreport directory.${RESET}"
-    echo -e "${YELLOW}${BOLD}Example: ./soslyze /path/to/sosreport${RESET}\n"
+    echo -e "${YELLOW}${BOLD}Example: ./soslyze.sh /path/to/sosreport${RESET}\n"
     exit
 fi
 
