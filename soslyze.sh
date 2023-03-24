@@ -1,26 +1,26 @@
 #!/bin/bash
 
-if [ $# -gt 0 ]; then 	
-	SOS_DIR=${1%/}   	# remove trailing slash
-else
-    echo "${YELLOW}${BOLD}Missing path to extracted sosreport directory.${RESET}"
-    echo "${YELLOW}${BOLD}Example: ./soslyze /path/to/sosreport${RESET}"
-    exit
-fi
-
-
-if [ ! -d $SOS_DIR/sos_reports ]; then
-    echo -e "\n\n${YELLOW}${BOLD}This is not a valid sosreport archive. Exiting..${RESET}\n\n"
-    exit
-fi
-
-
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 YELLOW='\033[01;33m'
 RESET='\033[0m'
 BOLD='\033[1m'
 CYAN='\033[01;36m'
+
+if [ $# -gt 0 ]; then 	
+	SOS_DIR=${1%/}   	# remove trailing slash
+else
+    echo -e "\n${YELLOW}${BOLD}Missing path to extracted sosreport directory.${RESET}"
+    echo -e "${YELLOW}${BOLD}Example: ./soslyze /path/to/sosreport${RESET}\n"
+    exit
+fi
+
+
+if [ ! -d $SOS_DIR/sos_reports ]; then
+    echo -e "\n${YELLOW}${BOLD}This is not a valid sosreport archive. Exiting..${RESET}\n"
+    exit
+fi
+
 
 cd $SOS_DIR
 
