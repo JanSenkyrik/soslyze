@@ -17,7 +17,7 @@ if [ $# -gt 0 ]; then
         SOS_DIR=${1%/}          # remove trailing slash
 else
     echo -e "\n${YELLOW}${BOLD}Missing path to extracted sosreport directory.${RESET}"
-    echo -e "${PURPLE}${BOLD}Example: ./soslyze.sh /path/to/sosreport${RESET}\n"
+    echo -e "Example: ./soslyze.sh /path/to/sosreport\n"
     exit
 fi
 
@@ -65,7 +65,7 @@ rhel_7_tasks() {
 
     # Print to stdout
     echo -e "\n"
-    echo -e "${CYAN}${BOLD}##### GENERAL INFORMATION #####${RESET}\n"
+    echo -e "${CYAN}${BOLD}### GENERAL INFORMATION ###${RESET}\n"
     echo -e "${BLUE}${BOLD}Hostname:${RESET}\n$HOSTNAME\n"
     echo -e "${BLUE}${BOLD}NICs:${RESET}\n$IP\n"
     echo -e "${BLUE}${BOLD}Time and Date:${RESET}\n$DATE\n"
@@ -79,7 +79,7 @@ rhel_7_tasks() {
     echo -e "${BLUE}${BOLD}Crypto policy:${RESET}\n$CRYPTO\n"
 
     echo -e "\n"
-    echo -e "${CYAN}${BOLD}##### SUBSCRIPTIONS & REPOSITORIES #####${RESET}\n"
+    echo -e "${CYAN}${BOLD}### SUBSCRIPTIONS & REPOSITORIES ###${RESET}\n"
     echo -e "${BLUE}${BOLD}How is the system registered:${RESET}\n$SUB_PLATFORM\n"
     echo -e "${BLUE}${BOLD}Proxy information:${RESET}\n$SUB_PROXY\n"
     echo -e "${BLUE}${BOLD}SCA (content_access=enabled):${RESET}\n$SUB_SCA\n"
@@ -130,7 +130,7 @@ rhel_8_tasks() {
 
     # Print to stdout
     echo -e "\n"
-    echo -e "${CYAN}${BOLD}##### GENERAL INFORMATION #####${RESET}\n"
+    echo -e "${CYAN}${BOLD}### GENERAL INFORMATION ###${RESET}\n"
     echo -e "${BLUE}${BOLD}Hostname:${RESET}\n$HOSTNAME\n"
     echo -e "${BLUE}${BOLD}NICs:${RESET}\n$IP\n"
     echo -e "${BLUE}${BOLD}Time and Date:${RESET}\n$DATE\n"
@@ -144,7 +144,7 @@ rhel_8_tasks() {
     echo -e "${BLUE}${BOLD}Crypto policy:${RESET}\n$CRYPTO\n"
 
     echo -e "\n"
-    echo -e "${CYAN}${BOLD}##### SUBSCRIPTIONS & REPOSITORIES #####${RESET}\n"
+    echo -e "${CYAN}${BOLD}### SUBSCRIPTIONS & REPOSITORIES ###${RESET}\n"
     echo -e "${BLUE}${BOLD}How is the system registered:${RESET}\n$SUB_PLATFORM\n"
     echo -e "${BLUE}${BOLD}Proxy information:${RESET}\n$SUB_PROXY\n"
     echo -e "${BLUE}${BOLD}SCA (content_access=enabled):${RESET}\n$SUB_SCA\n"
@@ -170,7 +170,7 @@ insights_tasks() {
     INSIGHTS_NETWORK=$(cat ./sos_commands/insights/insights-client_--test-connection_--net-debug)
 
     echo -e "\n"
-    echo -e "${CYAN}${BOLD}##### INSIGHTS #####${RESET}\n"
+    echo -e "${CYAN}${BOLD}### INSIGHTS ###${RESET}\n"
     echo -e "${BLUE}${BOLD}Version of insights-client:${RESET}\n$INSIGHTS_CLIENT\n"
     echo -e "${BLUE}${BOLD}Insights configuration (shows only non-default settings):${RESET}\n$INSIGHTS_CONFIG\n"
     echo -e "${BLUE}${BOLD}Insights connectivity check:${RESET}\n$INSIGHTS_NETWORK\n"
@@ -210,7 +210,7 @@ sat_6_tasks() {
     SAT_DB_FACTS=$(head -10 ./sos_commands/foreman/fact_names_prefixes)
 
     echo -e "\n"
-    echo -e "${CYAN}${BOLD}##### SATELLITE INFORMATION #####${RESET}\n"
+    echo -e "${CYAN}${BOLD}### SATELLITE INFORMATION ###${RESET}\n"
     echo -e "${BLUE}${BOLD}Satellite version:${RESET}\n$SAT_RELEASE\n"
     echo -e "${BLUE}${BOLD}Hammer ping:${RESET}\n$SAT_HEALTH_CHECK\n"
     echo -e "${BLUE}${BOLD}Custom or default certificates:${RESET}\n$SAT_CERTS\n"
@@ -268,5 +268,13 @@ if [[ $(grep -c "^satellite-6." ./installed-rpms) -eq 1 ]]; then
     sat_6_tasks
 else
     echo -e "${YELLOW}${BOLD}Not a satellite server. Skipping..${RESET}"
+fi
+
+# xsos integration
+
+if [[ "$2" == "--xsos" ]]; then
+    echo -e "\n"
+    echo -e "${CYAN}${BOLD}### MEM/CPU ANALYSIS (XSOS) ###${RESET}\n"
+    xsos -p .
 fi
 
