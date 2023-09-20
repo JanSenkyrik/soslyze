@@ -59,7 +59,7 @@ rhel_7_tasks() {
     SUB_ENABLED=$(cat ./sos_commands/yum/yum_-C_repolist)
     SUB_URLS=$(egrep "enabled=1|enabled= 1|enabled = 1|enabled =1" ./etc/yum.repos.d/redhat.repo -B 12 | egrep "\[|enabled[^_]|baseurl")
     SUB_UUID=$(grep -i uuid ./dmidecode)
-    SUB_HISTORY=$(head -30 ./sos_commands/yum/yum_history)
+    SUB_HISTORY=$(head -15 ./sos_commands/yum/yum_history)
     SUB_EXCLUDE=$(grep -i exclude ./etc/yum.conf)
     SUB_VARS=$(ls ./etc/yum/vars/)
 
@@ -124,7 +124,7 @@ rhel_8_tasks() {
     SUB_ENABLED=$(cat ./sos_commands/dnf/dnf_-C_repolist)
     SUB_URLS=$(egrep "enabled=1|enabled= 1|enabled = 1|enabled =1" ./etc/yum.repos.d/redhat.repo -B 12 | egrep "\[|enabled[^_]|baseurl")
     SUB_UUID=$(grep -i uuid ./dmidecode)
-    SUB_HISTORY=$(head -30 ./sos_commands/dnf/dnf_history)
+    SUB_HISTORY=$(head -15 ./sos_commands/dnf/dnf_history)
     SUB_EXCLUDE=$(grep -i exclude ./etc/dnf/dnf.conf)
     SUB_VARS=$(ls ./etc/dnf/vars/)
 
@@ -193,7 +193,7 @@ sat_6_tasks() {
     SAT_TUN_DYNFLOW=$(cat ./sos_commands/foreman/dynflow_units)
     #SAT_TUN_HTTPD=$(cat ./etc/httpd/conf.modules.d/prefork.conf)
     SAT_TUN_HTTPD=$(cat ./etc/httpd/conf.modules.d/event.conf)
-    SAT_TUN_PUPPET=$(grep JAVA_ARGS ./etc/sysconfig/puppetserver)
+    SAT_TUN_PUPPET=$(egrep "^JAVA_ARGS=" ./etc/sysconfig/puppetserver)
     SAT_TUN_PGSQL=$(egrep 'max_connections|shared_buffers|work_mem|autovacuum_vacuum_cost_limit' ./var/lib/pgsql/data/postgresql.conf)
     #SAT_TUN_QDROUTERD=$(grep LimitNOFILE ./etc/systemd/system/qdrouterd.service.d/*)
     #SAT_TUN_QPIDD=$(grep LimitNOFILE ./etc/systemd/system/qpidd.service.d/*)
