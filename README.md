@@ -2,6 +2,8 @@
 
 Summarize SysMgmt/Subscription Management/Insights data from an extracted sosreport archive.
 
+Optionally call memory & CPU analysis from xsos.
+
 Usage:
 
 ```
