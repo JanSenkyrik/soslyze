@@ -107,7 +107,7 @@ rhel_8_tasks() {
     HOSTNAME=$(cat ./hostname)
     RAM=$(cat ./free)
     CPU=$(grep -e "^CPU(s)" -e "Socket(s)" -e "Core(s) per socket" ./sos_commands/processor/lscpu)
-    FULL_FS=$(cat ./df | awk '$5 >=90 {print $5,$6}')
+    FULL_FS=$(cat ./df | awk '$5 >=90 {print $1,$2,$3,$4,$5,$6}')
     SELINUX=$(egrep -i "SELinux status|Current mode" ./sos_commands/selinux/sestatus)
     VM=$(egrep 'Vendor|Manufacturer' ./dmidecode | head -3)
     FIPS=$(cat ./proc/sys/crypto/fips_enabled)
