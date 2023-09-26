@@ -51,6 +51,7 @@ rhel_7_tasks() {
     # Subscription Management
     SUB_PLATFORM=$(egrep "^hostname|^baseurl|^port" ./etc/rhsm/rhsm.conf)
     SUB_PROXY=$(grep -e ^proxy ./etc/rhsm/rhsm.conf)
+    SUB_PROXY_ENV=$(grep -i proxy ./environment)
     SUB_SCA=$(for cert in `ls ./etc/pki/entitlement/`; do rct cat-cert ./etc/pki/entitlement/$cert | grep content_access; done)
     SUB_CONSUMED=$(cat ./sos_commands/subscription_manager/subscription-manager_list_--consumed | egrep "Subscription Name|Subskriptionsname|Nom de l'abonnement|SKU|Starts|Ends|Pool ID|Status Details")
     SUB_RPMS=$(grep -v 'Red Hat' ./sos_commands/rpm/package-data | awk {'print $1,$8,$9'})
@@ -81,7 +82,8 @@ rhel_7_tasks() {
     echo -e "\n"
     echo -e "${CYAN}${BOLD}### SUBSCRIPTIONS & REPOSITORIES ###${RESET}\n"
     echo -e "${BLUE}${BOLD}How is the system registered:${RESET}\n$SUB_PLATFORM\n"
-    echo -e "${BLUE}${BOLD}Proxy information:${RESET}\n$SUB_PROXY\n"
+    echo -e "${BLUE}${BOLD}Proxy information (rhsm.conf):${RESET}\n$SUB_PROXY\n"
+    echo -e "${BLUE}${BOLD}Proxy information (environment):${RESET}\n$SUB_PROXY_ENV\n"
     echo -e "${BLUE}${BOLD}SCA (content_access=enabled):${RESET}\n$SUB_SCA\n"
     echo -e "${BLUE}${BOLD}Subscriptions attached:${RESET}\n$SUB_CONSUMED\n"
     echo -e "${BLUE}${BOLD}Packages from 3rd party repositories:${RESET}\n$SUB_RPMS\n"
@@ -116,6 +118,7 @@ rhel_8_tasks() {
     # Subscription Management
     SUB_PLATFORM=$(egrep "^hostname|^baseurl|^port|^repo_ca_cert|^ca_cert_dir" ./etc/rhsm/rhsm.conf)
     SUB_PROXY=$(grep -e ^proxy ./etc/rhsm/rhsm.conf)
+    SUB_PROXY_ENV=$(grep -i proxy ./environment)
     SUB_SCA=$(for cert in `ls ./etc/pki/entitlement/`; do rct cat-cert ./etc/pki/entitlement/$cert | grep content_access; done)
     SUB_CONSUMED=$(cat ./sos_commands/subscription_manager/subscription-manager_list_--consumed | egrep "Subscription Name|Subskriptionsname|Nom de l'abonnement|SKU|Starts|Ends|Pool ID|Status Details")
     SUB_RPMS=$(grep -v 'Red Hat' ./sos_commands/rpm/package-data | awk {'print $1,$8,$9'})
@@ -147,6 +150,7 @@ rhel_8_tasks() {
     echo -e "${CYAN}${BOLD}### SUBSCRIPTIONS & REPOSITORIES ###${RESET}\n"
     echo -e "${BLUE}${BOLD}How is the system registered:${RESET}\n$SUB_PLATFORM\n"
     echo -e "${BLUE}${BOLD}Proxy information:${RESET}\n$SUB_PROXY\n"
+    echo -e "${BLUE}${BOLD}Proxy information (environment):${RESET}\n$SUB_PROXY_ENV\n"
     echo -e "${BLUE}${BOLD}SCA (content_access=enabled):${RESET}\n$SUB_SCA\n"
     echo -e "${BLUE}${BOLD}Subscriptions attached:${RESET}\n$SUB_CONSUMED\n"
     echo -e "${BLUE}${BOLD}Packages from 3rd party repositories:${RESET}\n$SUB_RPMS\n"
