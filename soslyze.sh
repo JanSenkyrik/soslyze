@@ -55,7 +55,7 @@ rhel_7_tasks() {
     SUB_SCA=$(for cert in `ls ./etc/pki/entitlement/`; do rct cat-cert ./etc/pki/entitlement/$cert | grep content_access; done)
     SUB_CONSUMED=$(cat ./sos_commands/subscription_manager/subscription-manager_list_--consumed | egrep "Subscription Name|Subskriptionsname|Nom de l'abonnement|SKU|Starts|Ends|Pool ID|Status Details")
     SUB_RPMS=$(grep -v 'Red Hat' ./sos_commands/rpm/package-data | awk {'print $1,$8,$9'})
-    SUB_FACTS=$(cat ./etc/rhsm/facts/*)
+    SUB_FACTS=$(for file in `ls ./etc/rhsm/facts | grep -v leapp.facts`; do cat ./etc/rhsm/facts/$file; done)
     SUB_LFCE=$(cat ./sos_commands/subscription_manager/subscription-manager_identity)
     SUB_ENABLED=$(cat ./sos_commands/yum/yum_-C_repolist)
     SUB_URLS=$(egrep "enabled=1|enabled= 1|enabled = 1|enabled =1" ./etc/yum.repos.d/redhat.repo -B 12 | egrep "\[|enabled[^_]|baseurl")
@@ -83,14 +83,14 @@ rhel_7_tasks() {
     echo -e "${CYAN}${BOLD}### SUBSCRIPTIONS & REPOSITORIES ###${RESET}\n"
     echo -e "${BLUE}${BOLD}How is the system registered:${RESET}\n$SUB_PLATFORM\n"
     echo -e "${BLUE}${BOLD}Proxy information (rhsm.conf):${RESET}\n$SUB_PROXY\n"
-    echo -e "${BLUE}${BOLD}Proxy information (environment):${RESET}\n$SUB_PROXY_ENV\n"
+    echo -e "${BLUE}${BOLD}Proxy information (env variables):${RESET}\n$SUB_PROXY_ENV\n"
     echo -e "${BLUE}${BOLD}SCA (content_access=enabled):${RESET}\n$SUB_SCA\n"
     echo -e "${BLUE}${BOLD}Subscriptions attached:${RESET}\n$SUB_CONSUMED\n"
     echo -e "${BLUE}${BOLD}Packages from 3rd party repositories:${RESET}\n$SUB_RPMS\n"
     echo -e "${BLUE}${BOLD}Enabled repositories:${RESET}\n$SUB_ENABLED\n"
     echo -e "${BLUE}${BOLD}Repo URLs:${RESET}\n$SUB_URLS\n"
     echo -e "${BLUE}${BOLD}CV, LFCE and organization:${RESET}\n$SUB_LFCE\n"
-    echo -e "${BLUE}${BOLD}Custom RHSM facts:${RESET}\n$SUB_FACTS\n"
+    echo -e "${BLUE}${BOLD}Custom RHSM facts (omitting leapp.facts):${RESET}\n$SUB_FACTS\n"
     echo -e "${BLUE}${BOLD}RHSM/DMI UUID:${RESET}\n$SUB_UUID\n"
     echo -e "${BLUE}${BOLD}Yum/dnf history:${RESET}\n$SUB_HISTORY\n"
     echo -e "${BLUE}${BOLD}Excluded packages by yum/dnf:${RESET}\n$SUB_EXCLUDE\n"
@@ -122,7 +122,7 @@ rhel_8_tasks() {
     SUB_SCA=$(for cert in `ls ./etc/pki/entitlement/`; do rct cat-cert ./etc/pki/entitlement/$cert | grep content_access; done)
     SUB_CONSUMED=$(cat ./sos_commands/subscription_manager/subscription-manager_list_--consumed | egrep "Subscription Name|Subskriptionsname|Nom de l'abonnement|SKU|Starts|Ends|Pool ID|Status Details")
     SUB_RPMS=$(grep -v 'Red Hat' ./sos_commands/rpm/package-data | awk {'print $1,$8,$9'})
-    SUB_FACTS=$(cat ./etc/rhsm/facts/*)
+    SUB_FACTS=$(for file in `ls ./etc/rhsm/facts | grep -v leapp.facts`; do cat ./etc/rhsm/facts/$file; done)
     SUB_LFCE=$(cat ./sos_commands/subscription_manager/subscription-manager_identity)
     SUB_ENABLED=$(cat ./sos_commands/dnf/dnf_-C_repolist)
     SUB_URLS=$(egrep "enabled=1|enabled= 1|enabled = 1|enabled =1" ./etc/yum.repos.d/redhat.repo -B 12 | egrep "\[|enabled[^_]|baseurl")
@@ -150,14 +150,14 @@ rhel_8_tasks() {
     echo -e "${CYAN}${BOLD}### SUBSCRIPTIONS & REPOSITORIES ###${RESET}\n"
     echo -e "${BLUE}${BOLD}How is the system registered:${RESET}\n$SUB_PLATFORM\n"
     echo -e "${BLUE}${BOLD}Proxy information:${RESET}\n$SUB_PROXY\n"
-    echo -e "${BLUE}${BOLD}Proxy information (environment):${RESET}\n$SUB_PROXY_ENV\n"
+    echo -e "${BLUE}${BOLD}Proxy information (env variables):${RESET}\n$SUB_PROXY_ENV\n"
     echo -e "${BLUE}${BOLD}SCA (content_access=enabled):${RESET}\n$SUB_SCA\n"
     echo -e "${BLUE}${BOLD}Subscriptions attached:${RESET}\n$SUB_CONSUMED\n"
     echo -e "${BLUE}${BOLD}Packages from 3rd party repositories:${RESET}\n$SUB_RPMS\n"
     echo -e "${BLUE}${BOLD}Enabled repositories:${RESET}\n$SUB_ENABLED\n"
     echo -e "${BLUE}${BOLD}Red Hat repo URLs:${RESET}\n$SUB_URLS\n"
     echo -e "${BLUE}${BOLD}CV, LFCE and organization:${RESET}\n$SUB_LFCE\n"
-    echo -e "${BLUE}${BOLD}Custom RHSM facts:${RESET}\n$SUB_FACTS\n"
+    echo -e "${BLUE}${BOLD}Custom RHSM facts (omitting leapp.facts):${RESET}\n$SUB_FACTS\n"
     echo -e "${BLUE}${BOLD}RHSM/DMI UUID:${RESET}\n$SUB_UUID\n"
     echo -e "${BLUE}${BOLD}Yum/dnf history:${RESET}\n$SUB_HISTORY\n"
     echo -e "${BLUE}${BOLD}Excluded packages by yum/dnf:${RESET}\n$SUB_EXCLUDE\n"
