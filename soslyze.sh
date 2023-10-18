@@ -61,6 +61,7 @@ rhel_7_tasks() {
     SUB_UUID=$(grep -i uuid ./dmidecode)
     SUB_HISTORY=$(head -15 ./sos_commands/yum/yum_history)
     SUB_EXCLUDE=$(grep -i exclude ./etc/yum.conf)
+    SUB_VERSIONLOCK=$(VL=./etc/yum/pluginconf.d/versionlock.list; if [ -f "$VL" ]; then cat $VL; fi)
     SUB_VARS=$(ls ./etc/yum/vars/)
 
     # Print to stdout
@@ -93,6 +94,7 @@ rhel_7_tasks() {
     echo -e "${BLUE}${BOLD}RHSM/DMI UUID:${RESET}\n$SUB_UUID\n"
     echo -e "${BLUE}${BOLD}Yum/dnf history:${RESET}\n$SUB_HISTORY\n"
     echo -e "${BLUE}${BOLD}Excluded packages by yum/dnf:${RESET}\n$SUB_EXCLUDE\n"
+    echo -e "${BLUE}${BOLD}Excluded packages by yum/dnf versionlock:${RESET}\n$SUB_VERSIONLOCK\n"
     echo -e "${BLUE}${BOLD}Yum/dnf variables:${RESET}\n$SUB_VARS\n"
 
 }
@@ -128,6 +130,7 @@ rhel_8_tasks() {
     SUB_UUID=$(grep -i uuid ./dmidecode)
     SUB_HISTORY=$(head -15 ./sos_commands/dnf/dnf_history)
     SUB_EXCLUDE=$(grep -i exclude ./etc/dnf/dnf.conf)
+    SUB_VERSIONLOCK=$(VL=./etc/yum/pluginconf.d/versionlock.list; if [ -f "$VL" ]; then cat $VL; fi)
     SUB_VARS=$(ls ./etc/dnf/vars/)
 
     # Print to stdout
@@ -160,6 +163,7 @@ rhel_8_tasks() {
     echo -e "${BLUE}${BOLD}RHSM/DMI UUID:${RESET}\n$SUB_UUID\n"
     echo -e "${BLUE}${BOLD}Yum/dnf history:${RESET}\n$SUB_HISTORY\n"
     echo -e "${BLUE}${BOLD}Excluded packages by yum/dnf:${RESET}\n$SUB_EXCLUDE\n"
+    echo -e "${BLUE}${BOLD}Excluded packages by yum/dnf versionlock:${RESET}\n$SUB_VERSIONLOCK\n"
     echo -e "${BLUE}${BOLD}Yum/dnf variables:${RESET}\n$SUB_VARS\n"
 
 }
