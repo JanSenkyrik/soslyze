@@ -19,6 +19,8 @@ The sosreport project is hosted at:
 
   * https://github.com/sosreport/sos
 
+----------------------------------------------------------
+
 xsos - Summarize system info from sosreports.
 
 The xsos project is hosted at:
