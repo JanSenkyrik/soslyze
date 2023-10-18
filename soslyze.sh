@@ -11,9 +11,7 @@ CYAN='\033[01;36m'
 PURPLE='\033[0;35m'
 BLUE='\033[0;34m'
 
-# Check for sosreport archive
-
-# Use provided path if exists or current path as default.
+# Use provided path if exists or current path as default
 if [ $# -gt 0 ]; then
         SOS_DIR=${1%/}          # remove trailing slash
 else
@@ -22,7 +20,7 @@ fi
 
 
 if [ ! -d $SOS_DIR/sos_reports ]; then
-    echo -e "\n${YELLOW}${BOLD} Sosreport path '${SOS_DIR}' is not a valid sosreport archive. Exiting..${RESET}\n"
+    echo -e "\n${YELLOW}${BOLD}Selected path '${SOS_DIR}' does not contain a valid sosreport archive. Exiting..${RESET}\n"
     exit
 fi
 
