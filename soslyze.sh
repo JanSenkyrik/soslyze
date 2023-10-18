@@ -22,7 +22,7 @@ fi
 
 
 if [ ! -d $SOS_DIR/sos_reports ]; then
-    echo -e "\n${YELLOW}${BOLD}This is not a valid sosreport archive. Exiting..${RESET}\n"
+    echo -e "\n${YELLOW}${BOLD} Sosreport path '${SOS_DIR}' is not a valid sosreport archive. Exiting..${RESET}\n"
     exit
 fi
 
