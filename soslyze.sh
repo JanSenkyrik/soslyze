@@ -13,12 +13,11 @@ BLUE='\033[0;34m'
 
 # Check for sosreport archive
 
+# Use provided path if exists or current path as default.
 if [ $# -gt 0 ]; then
         SOS_DIR=${1%/}          # remove trailing slash
 else
-    echo -e "\n${YELLOW}${BOLD}Missing path to extracted sosreport directory.${RESET}"
-    echo -e "Example: ./soslyze.sh /path/to/sosreport\n"
-    exit
+        SOS_DIR=.
 fi
 
 
