@@ -34,6 +34,7 @@ rhel_7_tasks() {
 
     # General
     DATE=$(cat ./date)
+    NTPSTATS=$(cat ./sos_commands/ntp/ntpstat)
     IP=$(grep "inet " ./ip_addr | awk -F'[: ]+' '{ print $4 }')
     RELEASE=$(cat ./etc/redhat-release)
     HOSTNAME=$(cat ./hostname)
@@ -68,6 +69,7 @@ rhel_7_tasks() {
     echo -e "${BLUE}${BOLD}Hostname:${RESET}\n$HOSTNAME\n"
     echo -e "${BLUE}${BOLD}NICs:${RESET}\n$IP\n"
     echo -e "${BLUE}${BOLD}Time and Date:${RESET}\n$DATE\n"
+    echo -e "${BLUE}${BOLD}NTP Stats:${RESET}\n$NTPSTATS\n"
     echo -e "${BLUE}${BOLD}Release:${RESET}\n$RELEASE\n"
     echo -e "${BLUE}${BOLD}Memory:${RESET}\n$RAM\n"
     echo -e "${BLUE}${BOLD}CPU:${RESET}\n$CPU\n"
@@ -103,6 +105,7 @@ rhel_8_tasks() {
 
     # General
     DATE=$(cat ./date)
+    NTPSTATS=$(cat ./sos_commands/chrony/chronyc_tracking)
     IP=$(grep "inet " ./ip_addr | awk -F'[: ]+' '{ print $4 }')
     RELEASE=$(cat ./etc/redhat-release)
     HOSTNAME=$(cat ./hostname)
@@ -137,6 +140,7 @@ rhel_8_tasks() {
     echo -e "${BLUE}${BOLD}Hostname:${RESET}\n$HOSTNAME\n"
     echo -e "${BLUE}${BOLD}NICs:${RESET}\n$IP\n"
     echo -e "${BLUE}${BOLD}Time and Date:${RESET}\n$DATE\n"
+    echo -e "${BLUE}${BOLD}NTP Stats:${RESET}\n$NTPSTATS\n"
     echo -e "${BLUE}${BOLD}Release:${RESET}\n$RELEASE\n"
     echo -e "${BLUE}${BOLD}Memory:${RESET}\n$RAM\n"
     echo -e "${BLUE}${BOLD}CPU:${RESET}\n$CPU\n"
