@@ -42,6 +42,7 @@ rhel_7_tasks() {
     CPU=$(grep -e "^CPU(s)" -e "Socket(s)" -e "Core(s) per socket" ./sos_commands/processor/lscpu)
     FULL_FS=$(cat ./df | awk '$5 >=90 {print $1,$2,$3,$4,$5,$6}')
     SELINUX=$(grep -Ei "SELinux status|Current mode" ./sos_commands/selinux/sestatus)
+    SELINUXCONF=$(grep -E "^SELINUX" ./etc/sysconfig/selinux)
     VM=$(grep -E 'Vendor|Manufacturer' ./dmidecode | head -3)
     FIPS=$(cat ./proc/sys/crypto/fips_enabled)
     CRYPTO=$(cat ./sos_commands/crypto/update-crypto-policies_--show)
@@ -52,7 +53,7 @@ rhel_7_tasks() {
     SUB_PROXY_ENV=$(grep -i proxy ./environment)
     SUB_SCA=$(for cert in `ls ./etc/pki/entitlement/`; do rct cat-cert ./etc/pki/entitlement/$cert | grep content_access; done)
     SUB_CONSUMED=$(cat ./sos_commands/subscription_manager/subscription-manager_list_--consumed | grep -E "Subscription Name|Subskriptionsname|Nom de l'abonnement|SKU|Starts|Ends|Pool ID|Status Details")
-    SUB_RPMS=$(grep -v 'Red Hat' ./sos_commands/rpm/package-data | awk {'print $1,$8,$9'})
+    SUB_RPMS=$(grep -v 'Red Hat' ./sos_commands/rpm/package-data | awk {'print $1,$8,$9'} | sort)
     SUB_FACTS=$(for file in `ls ./etc/rhsm/facts | grep -v leapp.facts`; do cat ./etc/rhsm/facts/$file; done)
     SUB_LFCE=$(cat ./sos_commands/subscription_manager/subscription-manager_identity)
     SUB_ENABLED=$(cat ./sos_commands/yum/yum_-C_repolist)
@@ -74,7 +75,7 @@ rhel_7_tasks() {
     echo -e "${BLUE}${BOLD}Memory:${RESET}\n$RAM\n"
     echo -e "${BLUE}${BOLD}CPU:${RESET}\n$CPU\n"
     echo -e "${BLUE}${BOLD}Filesystems over 90% usage:${RESET}\n$FULL_FS\n"
-    echo -e "${BLUE}${BOLD}SELinux:${RESET}\n$SELINUX\n"
+    echo -e "${BLUE}${BOLD}SELinux:${RESET}\n- Runtime:\n$SELINUX\n- Sysconfig:\n${SELINUXCONF}\n"
     echo -e "${BLUE}${BOLD}VM or physical:${RESET}\n$VM\n"
     echo -e "${BLUE}${BOLD}FIPS mode (0=disabled, 1=enabled):${RESET}\n$FIPS\n"
     echo -e "${BLUE}${BOLD}Crypto policy:${RESET}\n$CRYPTO\n"
@@ -113,6 +114,7 @@ rhel_8_tasks() {
     CPU=$(grep -e "^CPU(s)" -e "Socket(s)" -e "Core(s) per socket" ./sos_commands/processor/lscpu)
     FULL_FS=$(cat ./df | awk '$5 >=90 {print $1,$2,$3,$4,$5,$6}')
     SELINUX=$(grep -Ei "SELinux status|Current mode" ./sos_commands/selinux/sestatus)
+    SELINUXCONF=$(grep -E "^SELINUX" ./etc/sysconfig/selinux)
     VM=$(grep -E 'Vendor|Manufacturer' ./dmidecode | head -3)
     FIPS=$(cat ./proc/sys/crypto/fips_enabled)
     CRYPTO=$(cat ./sos_commands/crypto/update-crypto-policies_--show)
@@ -123,7 +125,7 @@ rhel_8_tasks() {
     SUB_PROXY_ENV=$(grep -i proxy ./environment)
     SUB_SCA=$(for cert in `ls ./etc/pki/entitlement/`; do rct cat-cert ./etc/pki/entitlement/$cert | grep content_access; done)
     SUB_CONSUMED=$(cat ./sos_commands/subscription_manager/subscription-manager_list_--consumed | grep -E "Subscription Name|Subskriptionsname|Nom de l'abonnement|SKU|Starts|Ends|Pool ID|Status Details")
-    SUB_RPMS=$(grep -v 'Red Hat' ./sos_commands/rpm/package-data | awk {'print $1,$8,$9'})
+    SUB_RPMS=$(grep -v 'Red Hat' ./sos_commands/rpm/package-data | awk {'print $1,$8,$9'} | sort)
     SUB_FACTS=$(for file in `ls ./etc/rhsm/facts | grep -v leapp.facts`; do cat ./etc/rhsm/facts/$file; done)
     SUB_LFCE=$(cat ./sos_commands/subscription_manager/subscription-manager_identity)
     SUB_ENABLED=$(cat ./sos_commands/dnf/dnf_-C_repolist)
@@ -145,7 +147,7 @@ rhel_8_tasks() {
     echo -e "${BLUE}${BOLD}Memory:${RESET}\n$RAM\n"
     echo -e "${BLUE}${BOLD}CPU:${RESET}\n$CPU\n"
     echo -e "${BLUE}${BOLD}Filesystems over 90% usage:${RESET}\n$FULL_FS\n"
-    echo -e "${BLUE}${BOLD}SELinux:${RESET}\n$SELINUX\n"
+    echo -e "${BLUE}${BOLD}SELinux:${RESET}\n- Runtime:\n$SELINUX\n- Sysconfig:\n${SELINUXCONF}\n"
     echo -e "${BLUE}${BOLD}VM or physical:${RESET}\n$VM\n"
     echo -e "${BLUE}${BOLD}FIPS mode (0=disabled, 1=enabled):${RESET}\n$FIPS\n"
     echo -e "${BLUE}${BOLD}Crypto policy:${RESET}\n$CRYPTO\n"
