@@ -7,7 +7,7 @@ Optionally call memory & CPU analysis from xsos.
 Usage:
 
 ```
-# ./soslyze.sh /path/to/sosreport
+# bin/soslyze /path/to/sosreport
 ```
 ----------------------------------------------------------
 
