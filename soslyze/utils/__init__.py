@@ -7,7 +7,12 @@ def print_headline(line):
 
 
 def print_value(line, value):
-    print((Style.BLUE_BOLD + "{0}" + Style.RESET_NEW_LINE + "{1}" + Style.NEW_LINE).format(line, value))
+    print((Style.BLUE_BOLD + "{0}" + Style.RESET_NEW_LINE +
+           "{1}" + Style.NEW_LINE).format(line, value))
+
+
+def print_warning(line):
+    print((Style.YELLOW_BOLD + "{0}" + Style.RESET).format(line))
 
 
 def package_present(path, name):

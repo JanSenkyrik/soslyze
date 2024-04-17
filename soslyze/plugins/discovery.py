@@ -7,13 +7,23 @@ from soslyze.utils import print_headline, print_value
 class Discovery:
     def __init__(self, path):
         if os.path.isfile(path + "/sos_commands/podman/podman_ps_-a"):
-            self.container_status = Path(path + "/sos_commands/podman/podman_ps_-a").read_text()
-        if os.path.isfile(path + "/sos_commands/discovery/podman_logs_-t_discovery"):
-            self.discovery_log = Path(path + "/sos_commands/discovery/podman_logs_-t_discovery").read_text()
-        if os.path.isfile(path + "/sos_commands/discovery/podman_logs_-t_dsc-db"):
-            self.dsc_db_log = Path(path + "/sos_commands/discovery/podman_logs_-t_dsc-db").read_text()
-        if os.path.isfile(path + "/sos_commands/discovery/podman_logs_-t_discovery-toolbox"):
-            self.toolbox_log = Path(path + "/sos_commands/discovery/podman_logs_-t_discovery-toolbox").read_text()
+            self.container_status = Path(
+                path + "/sos_commands/podman/podman_ps_-a").read_text()
+        if os.path.isfile(
+                path + "/sos_commands/discovery/podman_logs_-t_discovery"):
+            self.discovery_log = Path(
+                path + "/sos_commands/discovery/podman_logs_-t_discovery")\
+                .read_text()
+        if os.path.isfile(
+                path + "/sos_commands/discovery/podman_logs_-t_dsc-db"):
+            self.dsc_db_log = Path(
+                path + "/sos_commands/discovery/podman_logs_-t_dsc-db")\
+                .read_text()
+        if os.path.isfile(path + "/sos_commands/discovery/" +
+                          "podman_logs_-t_discovery-toolbox"):
+            self.toolbox_log = Path(
+                path + "/sos_commands/discovery/" +
+                "podman_logs_-t_discovery-toolbox").read_text()
 
     def output(self):
         print_headline("### DISCOVERY INFORMATION ###")

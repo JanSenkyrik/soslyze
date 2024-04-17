@@ -1,2 +1,5 @@
 xsos
 sosreports/
+__pycache__/
+*.py[cod]
+.idea

@@ -12,7 +12,10 @@ class Rhel:
         if os.path.isfile(path + '/ip_addr'):
             for line in Path(path + '/ip_addr').read_text().splitlines():
                 if re.search(r".*inet .*", line):
-                    lines.append(re.search(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2}", line).group())
+                    lines.append(
+                        re.search(
+                            r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2}",
+                            line).group())
             self.ip = '\n'.join(lines)
             lines.clear()
         if os.path.isfile(path + '/etc/redhat-release'):
@@ -24,9 +27,12 @@ class Rhel:
         if os.path.isfile(path + '/sos_commands/processor/lscpu'):
             self.cpu = ""
             tmp = Path(path + '/sos_commands/processor/lscpu').read_text()
-            self.cpu = self.cpu + str(re.search(r"CPU\(s\).*", tmp).group() + "\n")
-            self.cpu = self.cpu + str(re.search(r"Core\(s\) per socket.*", tmp).group() + "\n")
-            self.cpu = self.cpu + str(re.search(r"Socket\(s\).*", tmp).group())
+            self.cpu = self.cpu + str(
+                re.search(r"CPU\(s\).*", tmp).group() + "\n")
+            self.cpu = self.cpu + str(
+                re.search(r"Core\(s\) per socket.*", tmp).group() + "\n")
+            self.cpu = self.cpu + str(
+                re.search(r"Socket\(s\).*", tmp).group())
         if os.path.isfile(path + '/df'):
             for line in Path(path + '/df').read_text().splitlines():
                 if re.search(r".*9[0-9]%.*|.*100%.*", line) is not None:
@@ -37,9 +43,11 @@ class Rhel:
             self.selinux = parse_text(path + '/sos_commands/selinux/sestatus',
                                       r"SELinux status.*|Current mode.*")
         if os.path.isfile(path + '/dmidecode'):
-            self.virt_what = Path(path + '/dmidecode').read_text().splitlines()[0-3]
+            self.virt_what = Path(
+                path + '/dmidecode').read_text().splitlines()[0-3]
         if os.path.isfile(path + '/proc/sys/crypto/fips_enabled'):
-            self.fips = Path(path + '/proc/sys/crypto/fips_enabled').read_text()
+            self.fips = Path(
+                path + '/proc/sys/crypto/fips_enabled').read_text()
 
     def output(self):
         print_headline("### GENERAL INFORMATION ###")
@@ -60,8 +68,11 @@ class Rhel:
 class Rhel8(Rhel):
     def __init__(self, path):
         super().__init__(path)
-        if os.path.isfile(path + '/sos_commands/crypto/update-crypto-policies_--show'):
-            self.crypto = Path(path + '/sos_commands/crypto/update-crypto-policies_--show').read_text()
+        if os.path.isfile(
+                path + '/sos_commands/crypto/update-crypto-policies_--show'):
+            self.crypto = Path(
+                path + '/sos_commands/crypto/update-crypto-policies_--show')\
+                .read_text()
 
     def output(self):
         super().output()
@@ -75,5 +86,3 @@ class Rhel7(Rhel):
 
     def output(self):
         super().output()
-
-

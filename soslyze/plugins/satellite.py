@@ -1,7 +1,8 @@
 import os.path
 from pathlib import Path
 
-from soslyze.utils import parse_text, parse_text_exclude, print_headline, print_value
+from soslyze.utils import parse_text, parse_text_exclude,\
+    print_headline, print_value
 
 
 class Satellite:
@@ -10,70 +11,113 @@ class Satellite:
             self.release = parse_text(path + "/installed-rpms",
                                       r"satellite-6.*|capsule-6.*")
         if os.path.isfile(path + "/sos_commands/foreman/hammer_ping"):
-            self.health = Path(path + "/sos_commands/foreman/hammer_ping").read_text()
-        if os.path.isfile(path + "/etc/foreman-installer/scenarios.d/satellite-answers.yaml"):
-            self.certs = parse_text(path + "/etc/foreman-installer/scenarios.d/satellite-answers.yaml",
-                                    r".*(server_key|server_cert_req|server_ca_cert|server_cert).*")
+            self.health = Path(
+                path + "/sos_commands/foreman/hammer_ping").read_text()
+        if os.path.isfile(
+                path + "/etc/foreman-installer/scenarios.d/" +
+                "satellite-answers.yaml"):
+            self.certs = parse_text(
+                path + "/etc/foreman-installer/scenarios.d/" +
+                "satellite-answers.yaml",
+                r".*(server_key|server_cert_req|server_ca_cert|server_cert).*")
         if os.path.isfile(path + "/etc/foreman-installer/custom-hiera.yaml"):
-            self.hiera = parse_text_exclude(path + "/etc/foreman-installer/custom-hiera.yaml",
-                                            r"^#.*")
+            self.hiera = parse_text_exclude(
+                path + "/etc/foreman-installer/custom-hiera.yaml", r"^#.*")
         if os.path.isfile(path + "/sos_commands/foreman/smart_proxies"):
-            self.capsules = Path(path + "/sos_commands/foreman/smart_proxies").read_text()
-        if os.path.isfile(path + "/etc/foreman-installer/scenarios.d/satellite.yaml"):
-            self.tuning_profile = parse_text(path + "/etc/foreman-installer/scenarios.d/satellite.yaml",
-                                             r".*tuning.*")
-        if os.path.isfile(path + "/etc/systemd/system/foreman.service.d/installer.conf"):
-            self.puma_workers = parse_text(path + "/etc/systemd/system/foreman.service.d/installer.conf",
-                                           r".*(PUMA_THREADS|PUMA_WORKERS).*")
+            self.capsules = Path(path + "/sos_commands/foreman/smart_proxies")\
+                .read_text()
+        if os.path.isfile(
+                path + "/etc/foreman-installer/scenarios.d/satellite.yaml"):
+            self.tuning_profile = parse_text(
+                path + "/etc/foreman-installer/scenarios.d/satellite.yaml",
+                r".*tuning.*")
+        if os.path.isfile(
+                path + "/etc/systemd/system/foreman.service.d/installer.conf"):
+            self.puma_workers = parse_text(
+                path + "/etc/systemd/system/foreman.service.d/installer.conf",
+                r".*(PUMA_THREADS|PUMA_WORKERS).*")
         if os.path.isfile(path + "/sos_commands/foreman/foreman-puma-status"):
-            self.puma_stats = Path(path + "/sos_commands/foreman/foreman-puma-status").read_text()
+            self.puma_stats = Path(
+                path + "/sos_commands/foreman/foreman-puma-status").read_text()
         if os.path.isfile(path + "/etc/foreman/database.yml"):
             self.puma_pool = parse_text(path + "/etc/foreman/database.yml",
                                         r".*pool.*")
         if os.path.isfile(path + "/sos_commands/foreman/dynflow_units"):
-            self.dynflow = Path(path + "/sos_commands/foreman/dynflow_units").read_text()
+            self.dynflow = Path(
+                path + "/sos_commands/foreman/dynflow_units").read_text()
         if os.path.isfile(path + "/etc/httpd/conf.modules.d/event.conf"):
-            self.httpd = Path(path + "/etc/httpd/conf.modules.d/event.conf").read_text()
+            self.httpd = Path(
+                path + "/etc/httpd/conf.modules.d/event.conf").read_text()
         if os.path.isfile(path + "/etc/sysconfig/puppetserver"):
             self.puppet = parse_text(path + "/etc/sysconfig/puppetserver",
                                      r"^JAVA_ARGS=.*")
         if os.path.isfile(path + "/var/lib/pgsql/data/postgresql.conf"):
-            self.pgsql = parse_text(path + "/var/lib/pgsql/data/postgresql.conf",
-                                    r".*(max_connections|shared_buffers|work_mem|autovacuum_vacuum_cost_limit).*")
+            self.pgsql = parse_text(
+                path + "/var/lib/pgsql/data/postgresql.conf",
+                r".*(max_connections|shared_buffers|work_mem" +
+                "|autovacuum_vacuum_cost_limit).*")
         if os.path.isfile(path + "/sos_commands/foreman/foreman_tasks_tasks"):
-            self.tasks_running = Path(path + "/sos_commands/foreman/foreman_tasks_tasks").read_text().splitlines()[0]
-            self.tasks_running = self.tasks_running + "\n" + parse_text(path + "/sos_commands/foreman/foreman_tasks_tasks",
-                                                                        r".*running.*")
-            self.tasks_paused = Path(path + "/sos_commands/foreman/foreman_tasks_tasks").read_text().splitlines()[0]
-            self.tasks_paused = self.tasks_paused + "\n" + parse_text(path + "/sos_commands/foreman/foreman_tasks_tasks",
-                                                                      r".*paused.*")
-        if os.path.isfile(path + "/sos_commands/foreman/foreman_settings_table"):
-            self.settings = Path(path + "/sos_commands/foreman/foreman_settings_table").read_text().splitlines()[0]
-            self.settings = self.settings + "\n" + \
-                            parse_text(path + "/sos_commands/foreman/foreman_settings_table",
-                                       r".*(http_proxy|allow_auto_inventory_upload|destroy_vm_on_host_delete" +
-                                       "|foreman_tasks_proxy_batch_trigger|foreman_tasks_proxy_batch_size" +
-                                       "|remote_execution_ssh_user|remote_execution_effective_user" +
-                                       "|foreman_ansible_proxy_batch_size|content_default_http_proxy" +
-                                       "|subscription_connection_enabled|default_download_policy" +
-                                    "|default_redhat_download_policy).*")
+            self.tasks_running = Path(
+                path + "/sos_commands/foreman/foreman_tasks_tasks")\
+                .read_text().splitlines()[0]
+            self.tasks_running = self.tasks_running + "\n" + parse_text(
+                path + "/sos_commands/foreman/foreman_tasks_tasks",
+                r".*running.*")
+            self.tasks_paused = Path(
+                path + "/sos_commands/foreman/foreman_tasks_tasks")\
+                .read_text().splitlines()[0]
+            self.tasks_paused = self.tasks_paused + "\n" + parse_text(
+                path + "/sos_commands/foreman/foreman_tasks_tasks",
+                r".*paused.*")
+        if os.path.isfile(
+                path + "/sos_commands/foreman/foreman_settings_table"):
+            self.settings = Path(
+                path + "/sos_commands/foreman/foreman_settings_table"
+            ).read_text().splitlines()[0]
+            self.settings = self.settings + "\n" + parse_text(
+                path + "/sos_commands/foreman/foreman_settings_table",
+                r".*(http_proxy|allow_auto_inventory_upload" +
+                "|destroy_vm_on_host_delete" +
+                "|foreman_tasks_proxy_batch_trigger|" + ""
+                "foreman_tasks_proxy_batch_size|remote_execution_ssh_user" +
+                "|remote_execution_effective_user" +
+                "|foreman_ansible_proxy_batch_size" +
+                "|content_default_http_proxy|subscription_connection_enabled" +
+                "|default_download_policy|default_redhat_download_policy).*")
         if os.path.isfile(path + "/etc/foreman-proxy/ansible.env"):
-            self.ansible = parse_text(path + "/etc/foreman-proxy/ansible.env",
-                                      r".*(ANSIBLE_ROLES_PATH|ANSIBLE_COLLECTIONS_PATHS|ANSIBLE_SSH_ARGS).*")
-        if os.path.isfile(path + "/sos_commands/candlepin/simple_content_access"):
-            self.sca = Path(path + "/sos_commands/candlepin/simple_content_access").read_text()
-        if os.path.isfile(path + "/sos_commands/candlepin/du_-sh_.var.lib.candlepin"):
-            self.fs_cp = Path(path + "/sos_commands/candlepin/du_-sh_.var.lib.candlepin").read_text()
-        if os.path.isfile(path + "/sos_commands/postgresql/du_-sh_.var.lib.pgsql"):
-            self.fs_pgsql = Path(path + "/sos_commands/postgresql/du_-sh_.var.lib.pgsql").read_text()
-        if os.path.isfile(path + "/sos_commands/foreman/foreman_db_tables_sizes"):
-            self.db_foreman = "\n".join(Path(path + "/sos_commands/foreman/foreman_db_tables_sizes")
+            self.ansible = parse_text(
+                path + "/etc/foreman-proxy/ansible.env",
+                r".*(ANSIBLE_ROLES_PATH" +
+                "|ANSIBLE_COLLECTIONS_PATHS|ANSIBLE_SSH_ARGS).*")
+        if os.path.isfile(
+                path + "/sos_commands/candlepin/simple_content_access"):
+            self.sca = Path(
+                path + "/sos_commands/candlepin/simple_content_access")\
+                .read_text()
+        if os.path.isfile(
+                path + "/sos_commands/candlepin/du_-sh_.var.lib.candlepin"):
+            self.fs_cp = Path(
+                path + "/sos_commands/candlepin/du_-sh_.var.lib.candlepin")\
+                .read_text()
+        if os.path.isfile(
+                path + "/sos_commands/postgresql/du_-sh_.var.lib.pgsql"):
+            self.fs_pgsql = Path(
+                path + "/sos_commands/postgresql/du_-sh_.var.lib.pgsql")\
+                .read_text()
+        if os.path.isfile(
+                path + "/sos_commands/foreman/foreman_db_tables_sizes"):
+            self.db_foreman = "\n".join(Path(
+                path + "/sos_commands/foreman/foreman_db_tables_sizes")
                                         .read_text().splitlines()[0:12])
-        if os.path.isfile(path + "/sos_commands/candlepin/candlepin_db_tables_sizes"):
-            self.db_candlepin = "\n".join(Path(path + "/sos_commands/candlepin/candlepin_db_tables_sizes")
+        if os.path.isfile(
+                path + "/sos_commands/candlepin/candlepin_db_tables_sizes"):
+            self.db_candlepin = "\n".join(Path(
+                path + "/sos_commands/candlepin/candlepin_db_tables_sizes")
                                           .read_text().splitlines()[0:12])
-        if os.path.isfile(path + "/sos_commands/foreman/fact_names_prefixes"):
-            self.db_facts = "\n".join(Path(path + "/sos_commands/foreman/fact_names_prefixes")
+        if os.path.isfile(
+                path + "/sos_commands/foreman/fact_names_prefixes"):
+            self.db_facts = "\n".join(Path(
+                path + "/sos_commands/foreman/fact_names_prefixes")
                                       .read_text().splitlines()[0:10])
 
     def output(self):
@@ -116,7 +160,7 @@ class Satellite:
             print_value("Postgresql tuning:", self.pgsql)
         if hasattr(self, "fs_cp"):
             print_value("/var/lib/candlepin usage:", self.fs_cp)
-        if hasattr(self, "fs_lgsql"):
+        if hasattr(self, "fs_pgsql"):
             print_value("/var/lib/pgsql usage:", self.fs_pgsql)
         if hasattr(self, "db_foreman"):
             print_value("Foreman db table sizes:", self.db_foreman)

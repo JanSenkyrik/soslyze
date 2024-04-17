@@ -5,7 +5,7 @@ from soslyze.plugins.package_manager import Dnf, Yum
 from soslyze.plugins.rhui import Rhui
 from soslyze.plugins.satellite import Satellite
 from soslyze.plugins.subscription_manager import SubscriptionManager
-from soslyze.utils import Style, package_present
+from soslyze.utils import Style, package_present, print_warning
 import sys
 import os
 from pathlib import Path
@@ -22,21 +22,26 @@ class SoSLyze:
                 if os.path.isdir(sys.argv[1] + '/sos_reports'):
                     self.path = sys.argv[1]
                 else:
-                    print(Style.YELLOW_BOLD + "This is not a valid sosreport archive. Exiting.." + Style.RESET)
+                    print_warning(
+                        "This is not a valid sosreport archive. Exiting..")
                     exit()
             else:
-                print(Style.YELLOW_BOLD + "Path is not a folder." + Style.RESET)
+                print_warning("Path is not a folder.")
                 exit()
         else:
-            print(Style.YELLOW_BOLD + "Missing path to extracted sosreport directory." + Style.RESET)
+            print_warning("Missing path to extracted sosreport directory.")
             print("Example: ./soslyze.sh /path/to/sosreport")
             exit()
 
-        if len(re.findall('8\.', Path(self.path + '/etc/redhat-release').read_text())) == 1 or \
-                len(re.findall('9\.', Path(self.path + '/etc/redhat-release').read_text())) == 1:
+        if len(re.findall('8[.]', Path(
+                self.path + '/etc/redhat-release').read_text())) == 1 or \
+                len(re.findall('9[.]', Path(
+                    self.path + '/etc/redhat-release').read_text())) == 1:
             self.os = Rhel8(self.path)
-        elif len(re.findall('6\.', Path(self.path + '/etc/redhat-release').read_text())) == 1 or \
-                len(re.findall('7\.', Path(self.path + '/etc/redhat-release').read_text())) == 1:
+        elif len(re.findall('6[.]', Path(
+                self.path + '/etc/redhat-release').read_text())) == 1 or \
+                len(re.findall('7[.]', Path(
+                    self.path + '/etc/redhat-release').read_text())) == 1:
             self.os = Rhel7(self.path)
 
         if package_present(self.path, "dnf"):
