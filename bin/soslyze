@@ -1,0 +1,11 @@
+#!/usr/bin/python3
+
+import sys
+import os
+from soslyze import SoSLyze
+
+
+def main(argv):
+    SoSLyze()
+
+# vim:ts=4 et sw=4

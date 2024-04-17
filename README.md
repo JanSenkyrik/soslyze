@@ -8,7 +8,6 @@ Usage:
 
 ```
 # ./soslyze.sh /path/to/sosreport
-# ./soslyze.sh /path/to/sosreport --xsos
 ```
 ----------------------------------------------------------
 
@@ -18,11 +17,3 @@ aimed at Linux distributions and other UNIX-like operating systems.
 The sosreport project is hosted at:
 
   * https://github.com/sosreport/sos
-
-----------------------------------------------------------
-
-xsos - Summarize system info from sosreports.
-
-The xsos project is hosted at:
-
-  * https://github.com/ryran/xsos
