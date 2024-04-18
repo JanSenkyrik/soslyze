@@ -18,19 +18,21 @@ class SoSLyze:
         Initialization of SoSLyze
         """
         if len(sys.argv) > 1:
-            if os.path.isdir(sys.argv[1]):
-                if os.path.isdir(sys.argv[1] + '/sos_reports'):
-                    self.path = sys.argv[1]
-                else:
-                    print_warning(
-                        "This is not a valid sosreport archive. Exiting..")
-                    exit()
+            inputpath = sys.argv[1]
+        else:
+            inputpath = "."
+
+        if os.path.isdir(inputpath):
+            if os.path.isdir(inputpath + '/sos_reports'):
+                self.path = inputpath
             else:
-                print_warning("Path is not a folder.")
+                print_warning(
+                    f"'{inputpath}' is not a valid sosreport archive.")
+                print("Example: soslyze /path/to/sosreport")
                 exit()
         else:
-            print_warning("Missing path to extracted sosreport directory.")
-            print("Example: ./soslyze.sh /path/to/sosreport")
+            print_warning(f"'{inputpath}' is not a folder.")
+            print("Example: soslyze /path/to/sosreport")
             exit()
 
         if len(re.findall('8[.]', Path(
